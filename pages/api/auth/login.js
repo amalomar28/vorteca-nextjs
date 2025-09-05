@@ -32,6 +32,7 @@ export default function handler(req, res) {
 
   // Check password
   const isValidPassword = bcrypt.compareSync(password, user.password);
+  console.log('Password check:', { password, hash: user.password, isValid: isValidPassword })
   if (!isValidPassword) {
     return res.status(401).json({ message: 'Invalid credentials' });
   }
