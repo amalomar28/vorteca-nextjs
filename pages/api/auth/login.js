@@ -31,11 +31,17 @@ export default function handler(req, res) {
   }
 
   // Check password
+// Below line is a new added code: 
   const isValidPassword = bcrypt.compareSync(password, user.password);
   console.log('Password check:', { password, hash: user.password, isValid: isValidPassword })
   if (!isValidPassword) {
     return res.status(401).json({ message: 'Invalid credentials' });
   }
+  //New added code blod line 41-44
+  // Test bcrypt directly
+  const testHash = bcrypt.hashSync('demo123', 10)
+  const testCompare = bcrypt.compareSync('demo123', testHash)
+  console.log('Bcrypt test:', { testHash, testCompare })
 
   // Check subscription
   if (!user.subscriptionActive || new Date(user.subscriptionEnd) < new Date()) {
