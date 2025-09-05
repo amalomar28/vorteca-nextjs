@@ -34,6 +34,7 @@ export default function Home() {
             <li><a href="#process">Process</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
+            <li><a href="/login">Dashboard Login</a></li>
           </ul>
           <a href="#packages" className="cta-button">Get Started</a>
         </nav>
