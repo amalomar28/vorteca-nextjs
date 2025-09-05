@@ -1,141 +1,238 @@
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import DashboardLayout from '../../components/DashboardLayout';
-import ConceptCard from '../../components/ConceptCard';
-import FilterSection from '../../components/FilterSection';
-import { verifySubscription } from '../../utils/auth';
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+import Head from 'next/head'
 
 export default function Dashboard() {
-  const router = useRouter();
-  const [concepts, setConcepts] = useState([]);
-  const [filteredConcepts, setFilteredConcepts] = useState([]);
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null)
+  const [concepts, setConcepts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [selectedCategory, setSelectedCategory] = useState('all')
+  const router = useRouter()
 
   useEffect(() => {
-    checkAuth();
-    loadConcepts();
-  }, []);
+    const token = localStorage.getItem('token')
+    if (!token) {
+      router.push('/login')
+      return
+    }
 
-  const checkAuth = async () => {
+    // Decode token to get user info
     try {
-      const userData = await verifySubscription();
-      if (!userData) {
-        router.push('/login');
-        return;
-      }
-      setUser(userData);
+      const payload = JSON.parse(atob(token.split('.')[1]))
+      setUser({
+        email: payload.email,
+        subscription: payload.subscription || 'demo'
+      })
+      
+      // Fetch concepts with authentication
+      fetchConcepts(token)
     } catch (error) {
-      console.error('Auth error:', error);
-      router.push('/login');
-    } finally {
-      setLoading(false);
+      console.error('Token decode error:', error)
+      localStorage.removeItem('token')
+      router.push('/login')
     }
-  };
+  }, [router])
 
-  const loadConcepts = async () => {
+  const fetchConcepts = async (token) => {
     try {
-      const response = await fetch('/api/concepts');
-      const data = await response.json();
-      setConcepts(data);
-      setFilteredConcepts(data);
-    } catch (error) {
-      console.error('Error loading concepts:', error);
-    }
-  };
-
-  const handleFilter = (filters) => {
-    let filtered = concepts;
-
-    if (filters.category && filters.category !== 'all') {
-      filtered = filtered.filter(concept => concept.category === filters.category);
-    }
-
-    if (filters.marketSize && filters.marketSize !== 'all') {
-      filtered = filtered.filter(concept => {
-        const size = parseInt(concept.marketSize);
-        switch (filters.marketSize) {
-          case '50b+': return size >= 50;
-          case '100b+': return size >= 100;
-          case '200b+': return size >= 200;
-          default: return true;
+      const response = await fetch('/api/concepts', {
+        headers: {
+          'Authorization': `Bearer ${token}`
         }
-      });
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        setConcepts(data)
+      } else {
+        console.error('Failed to fetch concepts:', response.status)
+        // If unauthorized, redirect to login
+        if (response.status === 401) {
+          localStorage.removeItem('token')
+          router.push('/login')
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching concepts:', error)
+    } finally {
+      setLoading(false)
     }
+  }
 
-    if (filters.investment && filters.investment !== 'all') {
-      filtered = filtered.filter(concept => concept.investmentLevel === filters.investment);
-    }
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    router.push('/')
+  }
 
-    if (filters.timeline && filters.timeline !== 'all') {
-      filtered = filtered.filter(concept => concept.timeline === filters.timeline);
-    }
-
-    if (filters.search) {
-      const searchTerm = filters.search.toLowerCase();
-      filtered = filtered.filter(concept =>
-        concept.title.toLowerCase().includes(searchTerm) ||
-        concept.description.toLowerCase().includes(searchTerm) ||
-        concept.tags.some(tag => tag.toLowerCase().includes(searchTerm))
-      );
-    }
-
-    setFilteredConcepts(filtered);
-  };
+  const filteredConcepts = selectedCategory === 'all' 
+    ? concepts 
+    : concepts.filter(concept => concept.category === selectedCategory)
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading dashboard...</div>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div>Loading...</div>
       </div>
-    );
+    )
+  }
+
+  if (!user) {
+    return null
   }
 
   return (
-    <DashboardLayout user={user}>
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Monthly Feature Section */}
-        <div className="bg-gradient-to-r from-gray-900 to-gray-700 text-white p-8 rounded-lg mb-8 text-center">
-          <div className="inline-block bg-white bg-opacity-20 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-            September 2025 Featured Concepts
+    <div>
+      <Head>
+        <title>Dashboard - Vorteca Business Concepts</title>
+        <meta name="description" content="Access your business concept library" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      {/* Header */}
+      <header style={{ background: 'white', borderBottom: '1px solid #e5e7eb', padding: '1rem 0' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1a1a1a' }}>Vorteca Dashboard</h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <span style={{ color: '#666', fontSize: '0.875rem' }}>Welcome, {user.email}</span>
+            <span style={{ background: '#1a1a1a', color: 'white', padding: '0.25rem 0.75rem', borderRadius: '12px', fontSize: '0.75rem', textTransform: 'capitalize' }}>
+              {user.subscription}
+            </span>
+            <button onClick={handleLogout} style={{ color: '#dc2626', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.875rem' }}>
+              Logout
+            </button>
           </div>
-          <h2 className="text-3xl font-bold mb-4">3 New High-Potential Opportunities Added</h2>
-          <p className="text-lg opacity-90">
-            AI-powered micro-investment platform, Cross-border freelancer payments, and Smart building materials with IoT integration
+        </div>
+      </header>
+
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1rem' }}>
+        {/* Welcome Section */}
+        <div style={{ marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '2rem', fontWeight: '700', color: '#1a1a1a', marginBottom: '0.5rem' }}>
+            Business Concept Library
+          </h2>
+          <p style={{ color: '#666', fontSize: '1.1rem' }}>
+            Explore validated business opportunities with complete strategic frameworks
           </p>
         </div>
 
-        {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Business Concept Library</h1>
-          <p className="text-xl text-gray-600">
-            Browse validated business opportunities across fintech, life enhancement, and novel technology sectors
-          </p>
-        </div>
-
-        {/* Filters */}
-        <FilterSection onFilter={handleFilter} />
-
-        {/* Results Header */}
-        <div className="flex justify-between items-center mb-6">
-          <div className="text-gray-600">
-            Showing {filteredConcepts.length} of {concepts.length} concepts
-          </div>
-        </div>
-
-        {/* Concepts Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredConcepts.map((concept) => (
-            <ConceptCard key={concept.id} concept={concept} />
+        {/* Filter Tabs */}
+        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '2rem', borderBottom: '1px solid #e5e7eb' }}>
+          {[
+            { id: 'all', label: 'All Concepts' },
+            { id: 'fintech', label: 'Fintech' },
+            { id: 'life-enhancement', label: 'Life Enhancement' },
+            { id: 'novel-tech', label: 'Novel Technology' }
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setSelectedCategory(tab.id)}
+              style={{
+                padding: '0.75rem 1.5rem',
+                border: 'none',
+                background: selectedCategory === tab.id ? '#1a1a1a' : 'transparent',
+                color: selectedCategory === tab.id ? 'white' : '#666',
+                borderRadius: '6px 6px 0 0',
+                cursor: 'pointer',
+                fontWeight: selectedCategory === tab.id ? '600' : '400',
+                fontSize: '0.875rem'
+              }}
+            >
+              {tab.label}
+            </button>
           ))}
         </div>
 
-        {filteredConcepts.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-gray-500 text-lg">No concepts match your current filters</div>
+        {/* Concepts Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '1.5rem' }}>
+          {filteredConcepts.map(concept => (
+            <div key={concept.id} style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '1.5rem', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '1rem' }}>
+                <div>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#1a1a1a', marginBottom: '0.5rem' }}>
+                    {concept.title}
+                  </h3>
+                  <span style={{ 
+                    background: concept.category === 'fintech' ? '#dbeafe' : concept.category === 'life-enhancement' ? '#d1fae5' : '#fef3c7',
+                    color: concept.category === 'fintech' ? '#1e40af' : concept.category === 'life-enhancement' ? '#065f46' : '#92400e',
+                    padding: '0.25rem 0.75rem', 
+                    borderRadius: '12px', 
+                    fontSize: '0.75rem',
+                    textTransform: 'capitalize'
+                  }}>
+                    {concept.category.replace('-', ' ')}
+                  </span>
+                </div>
+                <span style={{ color: '#666', fontSize: '0.875rem', fontWeight: '600' }}>
+                  {concept.marketSize}
+                </span>
+              </div>
+
+              <p style={{ color: '#666', lineHeight: '1.6', marginBottom: '1.5rem' }}>
+                {concept.description}
+              </p>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+                <div>
+                  <div style={{ fontSize: '0.75rem', color: '#666', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '0.25rem' }}>
+                    Development Stage
+                  </div>
+                  <div style={{ fontSize: '0.875rem', fontWeight: '500', color: '#1a1a1a' }}>
+                    {concept.stage}
+                  </div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.75rem', color: '#666', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '0.25rem' }}>
+                    Risk Level
+                  </div>
+                  <div style={{ 
+                    fontSize: '0.875rem', 
+                    fontWeight: '500',
+                    color: concept.riskLevel === 'Low' ? '#065f46' : concept.riskLevel === 'Medium' ? '#92400e' : '#dc2626'
+                  }}>
+                    {concept.riskLevel}
+                  </div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.75rem', color: '#666', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '0.25rem' }}>
+                    Time to Market
+                  </div>
+                  <div style={{ fontSize: '0.875rem', fontWeight: '500', color: '#1a1a1a' }}>
+                    {concept.timeToMarket}
+                  </div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.75rem', color: '#666', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '0.25rem' }}>
+                    Investment Required
+                  </div>
+                  <div style={{ fontSize: '0.875rem', fontWeight: '500', color: '#1a1a1a' }}>
+                    {concept.investmentRequired}
+                  </div>
+                </div>
+              </div>
+
+              <button style={{
+                width: '100%',
+                background: '#1a1a1a',
+                color: 'white',
+                padding: '0.75rem',
+                border: 'none',
+                borderRadius: '6px',
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                cursor: 'pointer'
+              }}>
+                View Complete Strategic Framework
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {filteredConcepts.length === 0 && !loading && (
+          <div style={{ textAlign: 'center', padding: '3rem', color: '#666' }}>
+            <p>No concepts found in this category.</p>
           </div>
         )}
       </div>
-    </DashboardLayout>
-  );
+    </div>
+  )
 }
