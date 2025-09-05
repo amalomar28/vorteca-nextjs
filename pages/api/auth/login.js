@@ -6,7 +6,7 @@ const users = [
   {
     id: 1,
     email: 'demo@vorteca.com',
-    password:'$2b$10$8K1p2JZfvdnVfhwem4B3Tu.a4v7KnJOr5FqJ0g.DVEeNQa6cz/YU.',  // password: demo123', // password: demo123
+    password:'$2b$10$8K1p2JZfvdnVfhwem4B3Tu.a4v7KnJOr5FqJ0g.DVEeNQa6cz/YU.',  // password: demo123',  // password: demo123', // password: demo123
     name: 'Demo User',
     subscriptionActive: true,
     subscriptionEnd: '2025-12-31'
