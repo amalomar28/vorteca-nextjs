@@ -1,154 +1,192 @@
-// Sample concepts data - in production, this would come from a database
-const concepts = [
-  {
-    id: 1,
-    title: "AI-Powered Micro-Investment Platform",
-    category: "fintech",
-    description: "Machine learning algorithms that invest spare change from daily transactions into personalized portfolios targeting 78M Americans with limited investment options.",
-    marketSize: 45,
-    timeline: "12-18mo",
-    investmentLevel: "50k-200k",
-    difficulty: 4,
-    tags: ["High Growth", "Proven Demand", "Recurring Revenue"],
-    packageTiers: ["Architect", "Enterprise"],
-    targetCustomer: "Millennials and Gen Z with limited investment knowledge but regular spending patterns, particularly those earning $30-75K annually who want to start investing but feel overwhelmed by traditional options.",
-    revenueModel: "Management fees (0.25% of assets under management) plus premium analytics and financial planning subscriptions ($9.99/month). Additional revenue from partner bank accounts and credit card referrals.",
-    keyDifferentiator: "Behavioral psychology integration to maximize saving rates through micro-commitments and gamification, combined with tax-loss harvesting even on small portfolios.",
-    implementationNotes: [
-      "Requires SEC registration and FINRA compliance before launch",
-      "Partner with established custodial bank for asset management",
-      "Develop mobile-first app with bank account integration APIs",
-      "Build machine learning models for portfolio optimization",
-      "Create educational content for financial literacy"
-    ]
-  },
-  {
-    id: 2,
-    title: "AI Personal Assistant for Home Management",
-    category: "life-enhancement",
-    description: "Voice-activated system managing household tasks, maintenance, and scheduling for dual-income households seeking time optimization.",
-    marketSize: 85,
-    timeline: "15-18mo",
-    investmentLevel: "50k-200k",
-    difficulty: 3,
-    tags: ["IoT Integration", "Subscription Model", "Local Partnerships"],
-    packageTiers: ["Foundation", "Architect", "Enterprise"],
-    targetCustomer: "Dual-income households earning $75K+ with limited time for household management, particularly families with children or professionals working 50+ hours per week.",
-    revenueModel: "Hardware sales ($199-299 per unit) plus monthly service subscriptions ($39/month) covering maintenance scheduling, vendor coordination, and household optimization.",
-    keyDifferentiator: "Integration with local service providers and predictive maintenance algorithms that learn household patterns to prevent issues before they occur.",
-    implementationNotes: [
-      "Partner with IoT device manufacturers for hardware integration",
-      "Build local service provider network in target markets",
-      "Develop natural language processing for household commands",
-      "Create predictive maintenance algorithms",
-      "Establish data privacy and security protocols"
-    ]
-  },
-  {
-    id: 3,
-    title: "Personalized Nutrition via Genetic Testing",
-    category: "novel-tech",
-    description: "Real-time dietary recommendations based on genetic markers and biomarkers for health-conscious consumers willing to pay premium for personalization.",
-    marketSize: 180,
-    timeline: "24-36mo",
-    investmentLevel: "200k+",
-    difficulty: 5,
-    tags: ["Breakthrough Tech", "Premium Pricing", "Clinical Validation"],
-    packageTiers: ["Enterprise"],
-    targetCustomer: "Health-conscious consumers aged 25-55 with disposable income ($100K+ household) who have tried multiple diets without success and are willing to pay premium for personalized solutions.",
-    revenueModel: "Genetic testing kits ($299 one-time) plus ongoing personalized nutrition plans ($49/month) with optional premium coaching ($149/month).",
-    keyDifferentiator: "Continuous biomarker monitoring through wearable integration with adaptive recommendations that evolve based on real-time health data and genetic predispositions.",
-    implementationNotes: [
-      "Partner with established genetic testing laboratories",
-      "Conduct clinical trials to validate dietary recommendations",
-      "Obtain FDA clearance for health claims and biomarker tracking",
-      "Build HIPAA-compliant data infrastructure",
-      "Develop mobile app with wearable device integrations"
-    ]
-  },
-  {
-    id: 4,
-    title: "Cross-Border Freelancer Payment Network",
-    category: "fintech",
-    description: "Blockchain-based instant payments with automatic tax compliance targeting the $400B global freelancer economy payment friction.",
-    marketSize: 400,
-    timeline: "18-24mo",
-    investmentLevel: "200k+",
-    difficulty: 5,
-    tags: ["Blockchain", "Global Market", "Regulatory Complex"],
-    packageTiers: ["Architect", "Enterprise"],
-    targetCustomer: "International freelancers earning $50K+ annually and remote work platforms managing cross-border payments, particularly those frustrated with high fees and slow transfer times.",
-    revenueModel: "Transaction fees (1.5% per transfer) plus premium business accounts ($29/month) offering enhanced features like automated invoicing and tax document generation.",
-    keyDifferentiator: "Automated tax documentation for multiple jurisdictions combined with instant settlement using stablecoin technology, reducing both fees and compliance burden.",
-    implementationNotes: [
-      "Obtain money transmission licenses in target countries",
-      "Partner with established cryptocurrency exchanges",
-      "Build compliance system for international tax regulations",
-      "Develop blockchain integration with traditional banking",
-      "Create automated tax document generation system"
-    ]
-  },
-  {
-    id: 5,
-    title: "Senior Care Coordination Platform",
-    category: "life-enhancement",
-    description: "Family dashboard coordinating medical appointments, caregivers, and daily check-ins for 54M seniors needing support coordination.",
-    marketSize: 460,
-    timeline: "12-18mo",
-    investmentLevel: "50k-200k",
-    difficulty: 3,
-    tags: ["HIPAA Compliant", "Emergency Response", "Family Focused"],
-    packageTiers: ["Foundation", "Architect", "Enterprise"],
-    targetCustomer: "Adult children (ages 45-65) of aging parents who live separately but need coordination support, particularly families where children live in different cities than parents.",
-    revenueModel: "Family subscriptions ($149/month) plus caregiver marketplace fees (15% commission) and optional premium services like 24/7 monitoring ($299/month).",
-    keyDifferentiator: "Emergency response integration with family notification systems and predictive health monitoring that alerts families to changes in daily patterns.",
-    implementationNotes: [
-      "Ensure HIPAA compliance for medical data handling",
-      "Partner with local caregiving services and medical providers",
-      "Develop emergency response protocols and notification systems",
-      "Build caregiver background check and verification system",
-      "Create family communication and coordination tools"
-    ]
-  },
-  {
-    id: 6,
-    title: "SMB Cash Flow Prediction SaaS",
-    category: "fintech",
-    description: "AI-driven cash flow forecasting integrated with accounting systems for 32.5M US small businesses struggling with cash flow management.",
-    marketSize: 65,
-    timeline: "9-12mo",
-    investmentLevel: "under-50k",
-    difficulty: 2,
-    tags: ["SaaS Model", "Quick to Market", "SMB Focus"],
-    packageTiers: ["Foundation", "Architect", "Enterprise"],
-    targetCustomer: "Small businesses with $1M-$10M annual revenue that experience seasonal variations or irregular payment cycles, particularly service-based businesses.",
-    revenueModel: "Tiered SaaS subscriptions ($99-$499/month) based on business size and features, plus optional cash flow consulting services ($200/hour).",
-    keyDifferentiator: "Industry-specific forecasting models with 85%+ accuracy that integrate with existing accounting software and provide actionable recommendations for cash flow optimization.",
-    implementationNotes: [
-      "Integrate with popular accounting software (QuickBooks, Xero, etc.)",
-      "Build AI models trained on industry-specific cash flow patterns",
-      "Develop data security protocols for financial information",
-      "Create dashboard and alert systems for cash flow warnings",
-      "Build customer success team for onboarding and support"
+import jwt from 'jsonwebtoken';
+
+// Sample business concept data - In production, this would come from a database
+const concepts = {
+  categories: {
+    fintech: [
+      {
+        id: 1,
+        category: 'fintech',
+        title: 'Automated Personal Budget Optimizer',
+        description: 'AI-powered platform that automatically categorizes expenses, negotiates bills, and optimizes spending patterns to maximize savings while maintaining lifestyle preferences.',
+        marketSize: '$45B',
+        stage: 'MVP Ready',
+        riskLevel: 'Medium',
+        timeToMarket: '8-12 months',
+        investmentRequired: '$150K-$300K',
+        targetAudience: 'Young professionals, millennials with disposable income',
+        keyFeatures: ['Automated bill negotiation', 'Smart categorization', 'Goal-based savings', 'Investment recommendations'],
+        competitiveAdvantage: 'First-to-market with AI bill negotiation, partnerships with major service providers',
+        revenueModel: 'Subscription ($9.99/month) + percentage of savings achieved',
+        marketValidation: 'Survey of 2,000 users showed 78% would pay for automated financial management',
+        technicalRequirements: ['Machine learning infrastructure', 'Banking API integrations', 'Security compliance'],
+        regulatoryConsiderations: 'Financial services regulations, data privacy compliance',
+        exitStrategy: 'Acquisition by major fintech company or traditional bank',
+        projectedRevenue: {
+          year1: '$250K',
+          year2: '$2.1M',
+          year3: '$8.5M'
+        }
+      },
+      {
+        id: 2,
+        category: 'fintech',
+        title: 'Cross-Border Freelancer Payment Platform',
+        description: 'Streamlined payment solution specifically designed for freelancers working with international clients, featuring instant currency conversion, tax optimization, and integrated invoicing.',
+        marketSize: '$32B',
+        stage: 'Prototype Complete',
+        riskLevel: 'High',
+        timeToMarket: '12-18 months',
+        investmentRequired: '$300K-$500K',
+        targetAudience: 'International freelancers, remote workers, digital nomads',
+        keyFeatures: ['Instant currency conversion', 'Multi-country tax optimization', 'Integrated invoicing', 'Compliance automation'],
+        competitiveAdvantage: 'Specialized focus on freelancer pain points, built-in tax optimization across 50+ countries',
+        revenueModel: 'Transaction fees (2.5%) + premium features subscription',
+        marketValidation: 'Partnerships with 3 major freelancer platforms, 500+ beta users',
+        technicalRequirements: ['Multi-currency payment processing', 'Tax calculation engines', 'Compliance monitoring'],
+        regulatoryConsiderations: 'International money transmission licenses, tax reporting compliance',
+        exitStrategy: 'Strategic acquisition by PayPal, Stripe, or major freelancer platform',
+        projectedRevenue: {
+          year1: '$180K',
+          year2: '$1.8M',
+          year3: '$6.2M'
+        }
+      }
+    ],
+    lifeEnhancement: [
+      {
+        id: 3,
+        category: 'life-enhancement',
+        title: 'Personalized Wellness Hub Platform',
+        description: 'Comprehensive health and wellness platform that integrates wearable data, nutrition tracking, mental health resources, and personalized coaching to create individualized wellness plans.',
+        marketSize: '$28B',
+        stage: 'Market Research Complete',
+        riskLevel: 'Medium',
+        timeToMarket: '10-14 months',
+        investmentRequired: '$200K-$400K',
+        targetAudience: 'Health-conscious adults 25-45, corporate wellness programs',
+        keyFeatures: ['Wearable integration', 'AI-powered coaching', 'Nutrition optimization', 'Mental health tracking'],
+        competitiveAdvantage: 'Holistic approach combining physical and mental health, corporate partnership focus',
+        revenueModel: 'B2C subscription ($19.99/month) + B2B corporate licenses ($50/employee/year)',
+        marketValidation: 'Pilot with 2 Fortune 500 companies showed 23% improvement in employee wellness scores',
+        technicalRequirements: ['Wearable device APIs', 'Machine learning for personalization', 'HIPAA compliance'],
+        regulatoryConsiderations: 'Healthcare data privacy, medical device regulations for certain features',
+        exitStrategy: 'Acquisition by major health insurer or wellness company',
+        projectedRevenue: {
+          year1: '$320K',
+          year2: '$2.8M',
+          year3: '$9.1M'
+        }
+      },
+      {
+        id: 4,
+        category: 'life-enhancement',
+        title: 'Smart Task Management Ecosystem',
+        description: 'AI-driven productivity platform that learns user patterns, automatically prioritizes tasks, schedules optimal work blocks, and integrates with all major productivity tools to eliminate decision fatigue.',
+        marketSize: '$19B',
+        stage: 'Alpha Testing',
+        riskLevel: 'Low',
+        timeToMarket: '6-9 months',
+        investmentRequired: '$100K-$250K',
+        targetAudience: 'Knowledge workers, entrepreneurs, busy professionals',
+        keyFeatures: ['Automatic task prioritization', 'Calendar optimization', 'Energy level tracking', 'Cross-platform integration'],
+        competitiveAdvantage: 'Focus on decision fatigue reduction, advanced AI learning algorithms',
+        revenueModel: 'Freemium model with premium features at $12/month, team plans at $8/user/month',
+        marketValidation: 'Beta testing with 1,000 users showed 34% productivity improvement',
+        technicalRequirements: ['AI/ML infrastructure', 'Multiple API integrations', 'Real-time sync capabilities'],
+        regulatoryConsiderations: 'Data privacy compliance, workplace monitoring regulations',
+        exitStrategy: 'Strategic acquisition by Microsoft, Google, or Atlassian',
+        projectedRevenue: {
+          year1: '$150K',
+          year2: '$1.2M',
+          year3: '$4.8M'
+        }
+      }
+    ],
+    novelTech: [
+      {
+        id: 5,
+        category: 'novel-tech',
+        title: 'Personalized Nutrition Analytics Platform',
+        description: 'Advanced platform using genetic testing, microbiome analysis, and continuous glucose monitoring to provide hyper-personalized nutrition recommendations and meal planning.',
+        marketSize: '$67B',
+        stage: 'Technology Development',
+        riskLevel: 'High',
+        timeToMarket: '18-24 months',
+        investmentRequired: '$500K-$1M',
+        targetAudience: 'Health optimization enthusiasts, individuals with metabolic conditions, athletes',
+        keyFeatures: ['Genetic analysis integration', 'Microbiome tracking', 'CGM data analysis', 'Personalized meal planning'],
+        competitiveAdvantage: 'Most comprehensive personalization approach, medical-grade accuracy',
+        revenueModel: 'Initial genetic test ($299) + monthly subscription ($49) + premium coaching ($199/month)',
+        marketValidation: 'Partnerships with 2 major labs, 200+ pilot users, 87% reported significant health improvements',
+        technicalRequirements: ['Genetic analysis partnerships', 'Microbiome testing capabilities', 'CGM device integrations'],
+        regulatoryConsiderations: 'FDA oversight for health claims, genetic privacy regulations, medical device compliance',
+        exitStrategy: 'Acquisition by major health/nutrition company or IPO potential',
+        projectedRevenue: {
+          year1: '$280K',
+          year2: '$3.2M',
+          year3: '$12.8M'
+        }
+      },
+      {
+        id: 6,
+        category: 'novel-tech',
+        title: 'AR-Enhanced Professional Training',
+        description: 'Augmented reality platform for professional skill training across industries, providing immersive, hands-on learning experiences with real-time performance analytics and certification tracking.',
+        marketSize: '$43B',
+        stage: 'Prototype Development',
+        riskLevel: 'Medium',
+        timeToMarket: '15-20 months',
+        investmentRequired: '$400K-$700K',
+        targetAudience: 'Corporate training departments, trade schools, professional certification bodies',
+        keyFeatures: ['Industry-specific AR modules', 'Performance analytics', 'Certification integration', 'Multi-user collaboration'],
+        competitiveAdvantage: 'Focus on practical skills vs entertainment, industry partnership approach',
+        revenueModel: 'B2B licensing ($10K-$50K per module) + per-learner fees ($25/month)',
+        marketValidation: 'Pilots with 3 major manufacturers, 40% faster skill acquisition vs traditional training',
+        technicalRequirements: ['AR development platform', 'Computer vision capabilities', 'Cloud-based analytics'],
+        regulatoryConsiderations: 'Industry-specific training standards, safety certification requirements',
+        exitStrategy: 'Strategic acquisition by major training company or technology platform',
+        projectedRevenue: {
+          year1: '$200K',
+          year2: '$2.5M',
+          year3: '$8.9M'
+        }
+      }
     ]
   }
-];
+};
 
 export default function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  // In production, you would verify the JWT token here
-  const token = req.headers.authorization?.replace('Bearer ', '');
-  if (!token) {
-    return res.status(401).json({ message: 'No token provided' });
+  // Get and verify JWT token
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Access token required' });
   }
 
+  const token = authHeader.substring(7);
+  
   try {
-    // Verify token (simplified for demo)
-    res.status(200).json(concepts);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+    
+    // Check if user subscription is active (in a real app, check database)
+    if (!decoded.userId) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+
+    // Flatten all concepts into a single array
+    const allConcepts = [
+      ...concepts.categories.fintech,
+      ...concepts.categories.lifeEnhancement,
+      ...concepts.categories.novelTech
+    ];
+
+    res.status(200).json(allConcepts);
+    
   } catch (error) {
-    res.status(401).json({ message: 'Invalid token' });
+    return res.status(401).json({ message: 'Invalid or expired token' });
   }
 }
